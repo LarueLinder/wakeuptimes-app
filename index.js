@@ -1,51 +1,45 @@
+const clcBtn = document.getElementById("calc-btn");
+const refreshBtn = document.getElementById("refresh-btn");
+const returnBtn = document.getElementById("return-btn");
+const wakeUpHoursDiv = document.getElementById("wakeup-hours-div");
+const promptSection = document.getElementById("prompt-section");
+const imageContainer = document.getElementById("img-container");
+const resultSection = document.getElementById("result-section");
 
-const fallAsleeepTime = new Date(); //stores the current date and time -
-//instatiates an object of the Date class
-
-console.log("hello, world!");
-
-console.log(fallAsleeepTime); //this is in universal time 
-
-console.log(fallAsleeepTime.toLocaleDateString("en-US")); //this is in eastern US time zone
-fallAsleeepTime.setMinutes(fallAsleeepTime.getMinutes() + 14); //takes the avg person 14 minutes to fall asleep so add 14 
-
-console.log(fallAsleeepTime.toLocaleTimeString("en-US")); //this gives us only the time and not the date including seconds
-
-
-console.log("you will fall asleep at", fallAsleeepTime.toLocaleTimeString("en-US", {timeStyle: "short"})); //this gives us the time not including seconds
-
-const wakeUpTime = new Date(fallAsleeepTime);
-const wakeUpTimes = [];
-
-for(let i = 1; i <= 6; i++) {
-    wakeUpTime.setMinutes(wakeUpTime.getMinutes() + 90);
-    const wakeUpTimeString = wakeUpTime.toLocaleTimeString("en-US", {timeStyle: "short",});
-    wakeUpTimes.push(wakeUpTimeString); //add each time into the array 
-}
-
-//wakeUpTime.setMinutes(wakeUpTime.getMinutes() + 90);
-//const wakeUpTimeString = wakeUpTime.toLocaleTimeString("en-US", {timeStyle: "short",});
-
-//console.log('The  sleep cycle # {i} ends at ${wakeUpTimeString}');
-
-
-console.log("Wake-up times:", wakeUpTimes.join(", ")); //the join concotonates the array with a comma and space in between 
-
+//this is an event when someone clicks on our calcbtn call calcwakeuptimes
+//notice passing a function into another function. functions can be treated like any other value. store in var, pass to functions, define in funcion return from functoins etc
+//calcBtn.onclick = calcWakeUpTimes;
+//notice the below functions take a function called calcWakeUpTimes
+//
+clcBtn.addEventListener("click", calcWakeUpTimes);
+refreshBtn.addEventListener("click", calcWakeUpTimes);
+//anonymous function. notice the =>
+returnBtn.addEventListener("click", () => {
+  promptSection.classList.remove("hidden");
+  imageContainer.classList.remove("hidden");
+  resultSection.classList.add("hidden");
+});
 
 function calcWakeUpTimes() {
-    const fallAsleepTime = new Date();
-    fallAsleepTime.setMinutes(fallAsleepTime.getMinutes() + 14);
-  
-    const wakeUpTime = new Date(fallAsleepTime);
-    const wakeUpTimes = [];
-    for (let i = 1; i <= 6; i++) {
-      wakeUpTime.setMinutes(wakeUpTime.getMinutes() + 90);
-      const wakeUpTimeString = wakeUpTime.toLocaleTimeString("en-US", {
-        timeStyle: "short",
-      });
-      // console.log(`The sleep cycle #${i} ends at ${wakeUpTimeString}`);
-      wakeUpTimes.push(wakeUpTimeString);
-    }
-  
-    console.log("Wake-up times:", wakeUpTimes.join(", "));
+  const fallAsleepTime = new Date();
+  fallAsleepTime.setMinutes(fallAsleepTime.getMinutes() + 14);
+
+  const wakeUpTime = new Date(fallAsleepTime);
+  wakeUpHoursDiv.innerHTML = "";
+  for (let i = 1; i <= 6; i++) {
+    wakeUpTime.setMinutes(wakeUpTime.getMinutes() + 90);
+    const wakeUpTimeString = wakeUpTime.toLocaleTimeString("en-US", {
+      timeStyle: "short",
+    });
+    const cycleDiv = document.createElement("div");
+    cycleDiv.classList.add("cycle");
+    cycleDiv.setAttribute("id", `cycle-${i}`);
+    cycleDiv.textContent = wakeUpTimeString;
+    wakeUpHoursDiv.appendChild(cycleDiv);
   }
+
+  promptSection.classList.add("hidden");
+  imageContainer.classList.add("hidden");
+  resultSection.classList.remove("hidden");
+}
+
